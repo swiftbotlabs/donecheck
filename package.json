@@ -4,11 +4,48 @@
   "description": "Ask before your agent says \"done\": a paid Telegraph Miner checks the result against the task and returns SUBMIT, FIX or HOLD with an on-chain receipt. Client, CLI, MCP server and framework adapters; zero dependencies.",
   "type": "module",
   "main": "./index.mjs",
-  "exports": { ".": "./index.mjs", "./mcp": "./mcp.mjs", "./ai-sdk": "./adapters/ai-sdk.mjs", "./package.json": "./package.json" },
-  "bin": { "donecheck": "cli.mjs" },
-  "files": ["index.mjs", "mcp.mjs", "cli.mjs", "adapters/", "README.md", "LICENSE"],
-  "scripts": { "test": "node --test test/*.test.mjs && cd python && python3 -m unittest discover -s tests" },
-  "engines": { "node": ">=18.17" },
-  "keywords": ["agents", "mcp", "verification", "llm", "telegraph", "x402", "done-check"],
-  "license": "MIT"
+  "exports": {
+    ".": "./index.mjs",
+    "./mcp": "./mcp.mjs",
+    "./ai-sdk": "./adapters/ai-sdk.mjs",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "donecheck": "cli.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "mcp.mjs",
+    "cli.mjs",
+    "adapters/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs && cd python && python3 -m unittest discover -s tests"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "keywords": [
+    "agents",
+    "mcp",
+    "verification",
+    "llm",
+    "telegraph",
+    "x402",
+    "done-check",
+    "model-context-protocol",
+    "claude",
+    "agent-verification"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swiftbotlabs/donecheck.git"
+  },
+  "homepage": "https://github.com/swiftbotlabs/donecheck#readme",
+  "bugs": {
+    "url": "https://github.com/swiftbotlabs/donecheck/issues"
+  }
 }

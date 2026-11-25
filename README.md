@@ -26,7 +26,17 @@ curl -s https://donecheck.swiftbotlab.workers.dev/api/check \
 # -> {"verdict":"FIX","reasons":["judge: fails. ..."],"receipt":{"receipt_hash":"0x...","epoch_id":...}, ...}
 ```
 
-**Claude Code** (MCP):
+**Remote MCP, nothing to install.** Add this URL as an MCP server (Streamable HTTP) in any client that takes one:
+
+```
+https://donecheck.swiftbotlab.workers.dev/mcp
+```
+
+```bash
+claude mcp add --transport http done-check https://donecheck.swiftbotlab.workers.dev/mcp
+```
+
+**Claude Code** (local MCP over stdio):
 
 ```bash
 claude mcp add done-check -- npx -y github:swiftbotlabs/donecheck mcp
@@ -110,7 +120,7 @@ The method, the misses and every receipt are in
 ## Public usage counter
 
 `GET https://donecheck.swiftbotlab.workers.dev/api/stats` returns counts only: checks run, paid judgements, checks per day
-and checks per integration (`mcp`, `py`, `langchain`, ...). The badge above reads `/api/badge`. The counts include our own test runs.
+and checks per integration (`mcp-remote`, `mcp`, `py`, `langchain`, ...). The badge above reads `/api/badge`. The counts include our own test runs.
 
 ## Tests
 

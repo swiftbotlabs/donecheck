@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "donecheck"
+version = "0.1.0"
+description = "Ask before your agent says done: a paid Telegraph Miner checks the result against the task (SUBMIT / FIX / HOLD, with an on-chain receipt). Standard library only."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = []
+
+[project.optional-dependencies]
+langchain = ["langchain-core>=0.2"]
+openai-agents = ["openai-agents"]
+
+[project.scripts]
+donecheck = "donecheck.__main__:main"
+
+[tool.setuptools]
+packages = ["donecheck"]

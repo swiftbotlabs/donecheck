@@ -114,7 +114,7 @@ v = done_check(task, result, must_include=["total"])
 
 We measured the same decision on a 40-case known-answer set (20 correct deliverables, 20 with planted defects), over 3 runs.
 In all 3 runs no defective deliverable got `SUBMIT`. Unclear cases became `HOLD`.
-That set is ours. On 20 cases we did not write ([LLMBar](https://github.com/princeton-nlp/LLMBar), frozen before the run) the judge was too lenient: run 1 submitted 3 of 10 weaker outputs, and 10 cases got no Miner answer ([outsider results](https://github.com/swiftbotlabs/gig-guard/blob/main/eval/deliver/outsider/RESULTS.md)). Treat `SUBMIT` as a strong hint, not proof, and keep a human on anything that matters.
+That set is ours. On 20 cases we did not write ([LLMBar](https://github.com/princeton-nlp/LLMBar), frozen before the run) the judge was too lenient: it submitted 3 to 4 of 10 weaker outputs per run (runs 1-2), and some cases got no Miner answer ([outsider results](https://github.com/swiftbotlabs/gig-guard/blob/main/eval/deliver/outsider/RESULTS.md)). Treat `SUBMIT` as a strong hint, not proof, and keep a human on anything that matters.
 The method, the misses and every receipt are in
 [gig-guard/eval/deliver/RESULTS.md](https://github.com/swiftbotlabs/gig-guard/blob/main/eval/deliver/RESULTS.md).
 

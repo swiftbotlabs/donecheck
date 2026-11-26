@@ -1,0 +1,27 @@
+{
+  "frozen": "2026-11-26, written after the first 5 runs: the fixed versions an agent would send on its second done_check call. Not run yet (the day's 5 hosted checks were used).",
+  "cases": [
+    {
+      "id": 9, "framework": "openclaw", "kind": "fixed-after-FIX", "follows": 2,
+      "task": "Write one SQL query that returns the 5 customers with the highest total order amount, from the table orders(customer_id, amount). Return customer_id and the total.",
+      "result": "SELECT customer_id, SUM(amount) AS total FROM orders GROUP BY customer_id ORDER BY total DESC LIMIT 5;",
+      "mustInclude": [],
+      "expected": "SUBMIT"
+    },
+    {
+      "id": 10, "framework": "hermes", "kind": "fixed-after-FIX", "follows": 3,
+      "task": "Convert these three temperatures from Celsius to Fahrenheit and give all three answers: 0 C, 37 C, 100 C.",
+      "result": "0 C = 32 F\n37 C = 98.6 F\n100 C = 212 F",
+      "mustInclude": [],
+      "expected": "SUBMIT"
+    },
+    {
+      "id": 11, "framework": "hermes", "kind": "repeat-of-miss", "follows": 1,
+      "task": "Write a Python function is_leap(year) that returns True when the year is a leap year in the Gregorian calendar and False otherwise.",
+      "result": "def is_leap(year):\n    return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)",
+      "mustInclude": [],
+      "expected": "SUBMIT",
+      "why": "same text as case 1, which the judge wrongly rejected; shows whether the miss repeats"
+    }
+  ]
+}

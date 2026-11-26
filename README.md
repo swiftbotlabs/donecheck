@@ -58,6 +58,20 @@ npx -y github:swiftbotlabs/donecheck "Summarise the report in 3 bullets" "$(cat 
 echo "$RESULT" | npx -y github:swiftbotlabs/donecheck "$TASK" -      # exit 0 SUBMIT, 10 FIX, 11 HOLD
 ```
 
+## OpenClaw and Hermes Agent
+
+Ready-made setups: the MCP server config plus a `done-check` skill that makes the agent call the tool before it
+says "done" and act on the verdict.
+
+| Framework | Install | The agent sees |
+|---|---|---|
+| [OpenClaw](integrations/openclaw/README.md) | `openclaw mcp add donecheck --url https://donecheck.swiftbotlab.workers.dev/mcp --transport streamable-http --timeout 120`, then copy the skill | `donecheck__done_check` |
+| [Hermes Agent](integrations/hermes/README.md) | `mcp_servers.donecheck.url` in `~/.hermes/config.yaml`, then `hermes skills install` the skill | `mcp__donecheck__done_check` (via Tool Search) |
+
+Both were run in a sandbox with the real framework CLIs (`openclaw mcp probe`, `hermes mcp test`) and real paid
+checks through each framework's MCP client. The results, including a correct answer the judge rejected, are in
+[integrations/RESULTS-openclaw-hermes.md](integrations/RESULTS-openclaw-hermes.md).
+
 ## In code
 
 **JavaScript / TypeScript** (Node 18+, Bun, Deno):

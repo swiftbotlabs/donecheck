@@ -1,0 +1,9 @@
+# Add under mcp_servers in ~/.hermes/config.yaml, or run:
+#   hermes mcp add donecheck --url https://donecheck.swiftbotlab.workers.dev/mcp
+# Streamable HTTP is Hermes' default for url entries (do not set transport: sse).
+# timeout is per tool call in seconds; a paid judgement usually takes 5-15 s.
+mcp_servers:
+  donecheck:
+    url: "https://donecheck.swiftbotlab.workers.dev/mcp"
+    timeout: 180
+    connect_timeout: 30

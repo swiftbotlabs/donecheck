@@ -1,0 +1,15 @@
+// Merge into ~/.openclaw/openclaw.json (JSON5), or let `openclaw mcp add` write it for you (see README.md).
+// transport must be "streamable-http": when it is left out OpenClaw uses legacy SSE, which this server does not serve.
+// requestTimeoutMs: a paid judgement usually takes 5-15 s but can take longer; OpenClaw's default is 60 s.
+{
+  mcp: {
+    servers: {
+      donecheck: {
+        url: "https://donecheck.swiftbotlab.workers.dev/mcp",
+        transport: "streamable-http",
+        connectionTimeoutMs: 15000,
+        requestTimeoutMs: 120000,
+      },
+    },
+  },
+}

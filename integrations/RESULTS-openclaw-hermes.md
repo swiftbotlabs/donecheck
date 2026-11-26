@@ -43,6 +43,17 @@ result, and what a careful reviewer would say (`expected`). The judge never sees
   cases 6-8 run after 00:00 UTC on 27 Nov.
 - Spend: 5 judgements × $0.01 test USDC = $0.05 (testnet).
 
+## A real model turn (Hermes + Gemini)
+
+Cases 1-5 called the tool through each framework's own tool path, with no model deciding. On 2026-11-26 ~19:14 UTC
+we ran one full agent turn: Hermes Agent (built from source, in the same sandbox) with the `done-check` skill loaded
+and a real model (`gemini-3.5-flash-lite`, OpenAI-compatible endpoint), given the case 7 task and the wrong draft
+`O(n log n)`. The model found the tool and called `mcp__donecheck__done_check` itself, with the task and the draft
+verbatim. The day's cap was used up, so the server answered HOLD before any judgement, and the model did what the
+skill asks: it did not say done, it showed the result and the reason, and asked the user. Transcript (role, content,
+tool calls; provider signatures removed): `demo/runs/hermes-model-turn-1126-cap-hold.json`. After 00:00 UTC case 7
+runs as this same model turn, so the judged verdict comes from a model-made call.
+
 Raw tool results: [demo/runs/](demo/runs/).
 
 ## Framework integration (#19)
@@ -86,7 +97,7 @@ The hosted server allows 5 checks per connection per UTC day. After 00:00 UTC:
 node integrations/test/openclaw-sdk-check.mjs --tasks integrations/demo/tasks.json --call 6,8
 node integrations/test/openclaw-sdk-check.mjs --tasks integrations/demo/tasks-followup.json --call 9
 # Hermes path (inside a Hermes checkout with the server configured)
-.venv/bin/python <kit>/integrations/test/hermes-dispatch-check.py --tasks <kit>/integrations/demo/tasks.json --call 7
+# case 7: a real model turn (hermes chat -s done-check, model calls the tool itself; see above)
 .venv/bin/python <kit>/integrations/test/hermes-dispatch-check.py --tasks <kit>/integrations/demo/tasks-followup.json --call 10
 ```
 

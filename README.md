@@ -127,8 +127,7 @@ v = done_check(task, result, must_include=["total"])
 ## How good is the judge?
 
 We measured the same decision on a 40-case known-answer set (20 correct deliverables, 20 with planted defects), over 3 runs.
-In all 3 runs no defective deliverable got `SUBMIT`. Unclear cases became `HOLD`.
-That set is ours. On 20 cases we did not write ([LLMBar](https://github.com/princeton-nlp/LLMBar), frozen before the run) the judge was too lenient: it submitted about 4 of 10 weaker outputs per run (range 3-5 over 3 runs), and some cases got no Miner answer ([outsider results](https://github.com/swiftbotlabs/gig-guard/blob/main/eval/deliver/outsider/RESULTS.md)). Treat `SUBMIT` as a strong hint, not proof, and keep a human on anything that matters.
+That set is ours, so it is the easy test: the planted defects were held back in all 3 runs, and unclear cases became `HOLD`. On 20 cases we did not write ([LLMBar](https://github.com/princeton-nlp/LLMBar), frozen before the run) the judge was too lenient: it submitted about 4 of 10 weaker outputs per run (range 3-5 over 3 runs), and some cases got no Miner answer ([outsider results](https://github.com/swiftbotlabs/gig-guard/blob/main/eval/deliver/outsider/RESULTS.md)). Confirm mode in gig-guard (a second Miner must agree before `SUBMIT`) let 2 of 10 through in one labelled, not blind, run. Treat `SUBMIT` as a strong hint, not proof, and keep a human on anything that matters.
 The method, the misses and every receipt are in
 [gig-guard/eval/deliver/RESULTS.md](https://github.com/swiftbotlabs/gig-guard/blob/main/eval/deliver/RESULTS.md).
 

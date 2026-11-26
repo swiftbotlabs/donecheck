@@ -35,12 +35,12 @@ result, and what a careful reviewer would say (`expected`). The judge never sees
   ends with the user seeing the result and the reason. It never lets a bad result through.
 - **No defective result got SUBMIT.** On 5 cases that is a small sample. Our larger runs found the judge too
   lenient on outside data (about 4 of 10 weaker outputs passed on LLMBar; see the top-level README).
-- Every judged call returned a receipt hash, and all 5 are now **settled**: on 2026-11-27 each one was found in epoch 58's block on the
+- Every judged call returned a receipt hash, and all 5 are now **settled**: on 2026-11-26 ~18:5x UTC each one was found in epoch 58's block on the
   node (`GET https://devnode.telegraphprotocol.com/v1/blocks/58/deliveries/<hash>`: intent TASK_EXECUTION_QUALITY_GENERAL, 10,000 uUSDC,
   a 9-hash proof each; settled Miner ids 6121, 6119, 6121, 5311, 6119 for cases 1-5).
-- On 2026-11-27 ~00:2x UTC a further try at cases 6 and 8 came back HOLD before any payment: "this connection has used its 5 checks for
+- On 2026-11-26 ~18:5x UTC a further try at cases 6 and 8 came back HOLD before any payment: "this connection has used its 5 checks for
   today (UTC)". That is the hosted server's daily cap failing closed (no judgement, no charge, and the agent is told not to say done);
-  cases 6-8 run when the cap allows.
+  cases 6-8 run after 00:00 UTC on 27 Nov.
 - Spend: 5 judgements × $0.01 test USDC = $0.05 (testnet).
 
 Raw tool results: [demo/runs/](demo/runs/).

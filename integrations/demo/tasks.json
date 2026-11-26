@@ -1,0 +1,68 @@
+{
+  "frozen": "2026-11-26, written before any of these cases was sent to the judge. Do not edit after a run; add new cases with new ids.",
+  "note": "expected = what a careful human reviewer would say. The judge never sees it. Cases 1-5 run on 2026-11-26 (hosted check allows 5 paid checks per connection per UTC day); 6-8 run on a later day.",
+  "cases": [
+    {
+      "id": 1, "framework": "hermes", "kind": "correct",
+      "task": "Write a Python function is_leap(year) that returns True when the year is a leap year in the Gregorian calendar and False otherwise.",
+      "result": "def is_leap(year):\n    return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)",
+      "mustInclude": [],
+      "expected": "SUBMIT"
+    },
+    {
+      "id": 2, "framework": "openclaw", "kind": "wrong",
+      "task": "Write one SQL query that returns the 5 customers with the highest total order amount, from the table orders(customer_id, amount). Return customer_id and the total.",
+      "result": "SELECT customer_id, amount FROM orders ORDER BY amount DESC LIMIT 5;",
+      "mustInclude": [],
+      "expected": "FIX",
+      "defect": "ranks single orders, not per-customer totals (no SUM / GROUP BY); one customer can appear several times"
+    },
+    {
+      "id": 3, "framework": "hermes", "kind": "incomplete",
+      "task": "Convert these three temperatures from Celsius to Fahrenheit and give all three answers: 0 C, 37 C, 100 C.",
+      "result": "0 C = 32 F\n100 C = 212 F",
+      "mustInclude": [],
+      "expected": "FIX",
+      "defect": "37 C (98.6 F) is missing"
+    },
+    {
+      "id": 4, "framework": "openclaw", "kind": "claimed-not-done",
+      "task": "Translate this sentence into French: \"Good morning, the meeting has been moved to 3 pm.\"",
+      "result": "Done! I have translated the sentence into French as requested.",
+      "mustInclude": [],
+      "expected": "FIX",
+      "defect": "the agent says it translated but gives no translation"
+    },
+    {
+      "id": 5, "framework": "hermes", "kind": "wrong-subtle",
+      "task": "Write a JavaScript regular expression that matches a whole string that is a US ZIP code: exactly 5 digits, optionally followed by a hyphen and exactly 4 digits.",
+      "result": "/\\d{5}(-\\d{4})?/",
+      "mustInclude": [],
+      "expected": "FIX",
+      "defect": "no ^ and $ anchors, so it also matches inside longer strings such as abc123456"
+    },
+    {
+      "id": 6, "framework": "openclaw", "kind": "correct",
+      "task": "Summarise this incident note in exactly 3 bullet points and keep the HTTP status code: \"At 14:02 UTC the checkout API began returning 502 errors after a config push removed the upstream pool. On-call rolled the config back at 14:19. Error rate was back to normal at 14:21. About 1,900 checkout attempts failed.\"",
+      "result": "- 14:02 UTC: a config push removed the upstream pool and the checkout API started returning 502 errors.\n- 14:19: on-call rolled the config back; errors were back to normal by 14:21.\n- Impact: about 1,900 checkout attempts failed.",
+      "mustInclude": ["502"],
+      "expected": "SUBMIT"
+    },
+    {
+      "id": 7, "framework": "hermes", "kind": "wrong-fact",
+      "task": "In one line: what is the worst-case time complexity of binary search on a sorted array of n elements?",
+      "result": "O(n log n)",
+      "mustInclude": [],
+      "expected": "FIX",
+      "defect": "it is O(log n)"
+    },
+    {
+      "id": 8, "framework": "openclaw", "kind": "missing-required",
+      "task": "Write a one-line git commit message for a change that fixes a null pointer crash in the config parser. It must reference issue #42.",
+      "result": "Fix null pointer crash in config parser",
+      "mustInclude": ["#42"],
+      "expected": "FIX",
+      "defect": "does not reference #42 (the free required-string check should catch it)"
+    }
+  ]
+}

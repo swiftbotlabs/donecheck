@@ -1,6 +1,6 @@
 # donecheck in OpenClaw and Hermes Agent: results
 
-Date: 2026-11-26. Everything ran against the live hosted server `https://donecheck.swiftbotlab.workers.dev/mcp`.
+Runs: 2026-11-26 and 2026-11-27 (UTC); last updated 2026-11-27. Everything ran against the live hosted server `https://donecheck.swiftbotlab.workers.dev/mcp`.
 **Testnet:** each judgement is a $0.01 test-USDC payment to a Telegraph Miner from an Ethereum Sepolia escrow,
 paid by the hosted service.
 
@@ -11,23 +11,25 @@ Eight tasks with known answers were written and committed before any of them was
 result, and what a careful reviewer would say (`expected`). The judge never sees `expected`. Five ran on
 2026-11-26 (the hosted server's limit per connection per UTC day); cases 6 to 8 and one follow-up ran on 2026-11-27.
 
-| # | Path | Kind | Expected | Verdict | Right? | Miner | Time | Receipt |
+| # | Path | Kind | Expected | Verdict | Right? | Miner (answer id / settled id) | Time | Receipt |
 |---|---|---|---|---|---|---|---|---|
-| 1 | Hermes `tool_call` | correct `is_leap` function | SUBMIT | FIX | **No** | 9002 | 9.6 s | `0xfd7a163eb82e97381ad72696a00f8e90b733d599485349d90fa1db4927508e75` |
-| 2 | OpenClaw client | wrong SQL (no `SUM`/`GROUP BY`) | FIX | FIX | Yes | 302 | 6.5 s | `0x51f15e47e78387c36b9ff0e28ff06f0b5a3f11c0625c0c636e86e6c01ee2d999` |
-| 3 | Hermes `tool_call` | incomplete (2 of 3 conversions) | FIX | FIX | Yes | 9002 | 11.4 s | `0x50bbd8ce63644fa5e8487dce73a4ef5bc5c31bcd416d81f4889014734acb4ba2` |
-| 4 | OpenClaw client | claims done, no translation | FIX | FIX | Yes | 20260828 | 11.7 s | `0xda04765d1f2f110771217f435e69e0f37a7f32a6cf5fb1f0154192e59b0a0b01` |
-| 5 | Hermes `tool_call` | regex without `^`/`$` anchors | FIX | FIX | Yes | 302 | 9.9 s | `0x6ff03168c7194607a6c181d05140c4f76e28e2671b8d14c0d2d99966ce1ac2e3` |
-| 6 | OpenClaw client | correct 3-bullet summary, `mustInclude: ["502"]` | SUBMIT | SUBMIT | Yes | 71074 | 11.9 s | `0x94bde47bb96673c689eeb5f32f505c1b004a9669a1dd29ffe773649d2caf091d` (epoch 63) |
-| 7 | Hermes + Gemini, model turn | wrong fact (`O(n log n)` for binary search) | FIX | FIX | Yes | 71074 | 10.3 s | `0x5a7b519a663e23b2899cc4b77784fa1e1260b835d03b6c7baa5ad972da85fbb4` (epoch 63) |
-| 8 | OpenClaw client | commit message missing required `#42` | FIX | FIX | Yes | 71074 | 7.0 s | `0x19669fe3f79c327c0090ec7f927a480e2860c1215c91fb093bb14923fa3336a1` (epoch 63) |
+| 1 | Hermes `tool_call` | correct `is_leap` function | SUBMIT | FIX | **No** | 9002 / 6121 | 9.6 s | `0xfd7a163eb82e97381ad72696a00f8e90b733d599485349d90fa1db4927508e75` |
+| 2 | OpenClaw client | wrong SQL (no `SUM`/`GROUP BY`) | FIX | FIX | Yes | 302 / 6119 | 6.5 s | `0x51f15e47e78387c36b9ff0e28ff06f0b5a3f11c0625c0c636e86e6c01ee2d999` |
+| 3 | Hermes `tool_call` | incomplete (2 of 3 conversions) | FIX | FIX | Yes | 9002 / 6121 | 11.4 s | `0x50bbd8ce63644fa5e8487dce73a4ef5bc5c31bcd416d81f4889014734acb4ba2` |
+| 4 | OpenClaw client | claims done, no translation | FIX | FIX | Yes | 20260828 / 5311 | 11.7 s | `0xda04765d1f2f110771217f435e69e0f37a7f32a6cf5fb1f0154192e59b0a0b01` |
+| 5 | Hermes `tool_call` | regex without `^`/`$` anchors | FIX | FIX | Yes | 302 / 6119 | 9.9 s | `0x6ff03168c7194607a6c181d05140c4f76e28e2671b8d14c0d2d99966ce1ac2e3` |
+| 6 | OpenClaw client | correct 3-bullet summary, `mustInclude: ["502"]` | SUBMIT | SUBMIT | Yes | 71074 / 4877 | 11.9 s | `0x94bde47bb96673c689eeb5f32f505c1b004a9669a1dd29ffe773649d2caf091d` (epoch 63) |
+| 7 | Hermes + Gemini, model turn | wrong fact (`O(n log n)` for binary search) | FIX | FIX | Yes | 71074 / 4877 | 10.3 s | `0x5a7b519a663e23b2899cc4b77784fa1e1260b835d03b6c7baa5ad972da85fbb4` (epoch 63) |
+| 8 | OpenClaw client | commit message missing required `#42` | FIX | FIX | Yes | 71074 / 4877 | 7.0 s | `0x19669fe3f79c327c0090ec7f927a480e2860c1215c91fb093bb14923fa3336a1` (epoch 63) |
+
+Miner ids: the node names a Miner twice. The answer carries one id (for example 302) and the settled receipt in the epoch block carries the Miner's registration id (for example 6119). The tables give both; the pairs held on every receipt we checked (9002 / 6121, 302 / 6119, 20260828 / 5311, 71074 / 4877).
 
 Cases 1-5 are in epoch 58. Follow-ups (the agent fixes the result after a FIX and checks again):
 
-| # | Path | After | Verdict | Right? | Miner | Time | Receipt (epoch 63) |
+| # | Path | After | Verdict | Right? | Miner (answer id / settled id) | Time | Receipt (epoch 63) |
 |---|---|---|---|---|---|---|---|
-| 7b | Hermes + Gemini, same model turn | the model itself corrected case 7 to `O(log n)` and called the tool again | SUBMIT (score 0.9) | Yes | 71074 | 5.0 s | `0x1eaaf8815c48d79d37b5e8ea315f785728401f4aeaa60b9aad4a3941cc2e99a2` |
-| 9 | OpenClaw client | case 2 SQL with `SUM` and `GROUP BY` | SUBMIT | Yes | 71074 | 8.9 s | `0x17c4cc692f9e5c2c3a1e393c92741250d28df995c81121b818962049f98b2c9d` |
+| 7b | Hermes + Gemini, same model turn | the model itself corrected case 7 to `O(log n)` and called the tool again | SUBMIT (score 0.9) | Yes | 71074 / 4877 | 5.0 s | `0x1eaaf8815c48d79d37b5e8ea315f785728401f4aeaa60b9aad4a3941cc2e99a2` |
+| 9 | OpenClaw client | case 2 SQL with `SUM` and `GROUP BY` | SUBMIT | Yes | 71074 / 4877 | 8.9 s | `0x17c4cc692f9e5c2c3a1e393c92741250d28df995c81121b818962049f98b2c9d` |
 
 Case 10 (the planned Hermes fix-and-recheck) was not run separately: case 7b is the same step, made by the model.
 Case 11 (resend of the case 1 miss) was not run: the day's 5 checks were used. It waits for another day.

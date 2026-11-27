@@ -9,31 +9,43 @@ paid by the hosted service.
 Eight tasks with known answers were written and committed before any of them was sent
 ([demo/tasks.json](demo/tasks.json), commit `cc21787`, sha256 `0f0dddfe…2835`). Each has a task, the agent's
 result, and what a careful reviewer would say (`expected`). The judge never sees `expected`. Five ran on
-2026-11-26, which is the hosted server's limit per connection per UTC day. Cases 6 to 8 are still to run.
+2026-11-26 (the hosted server's limit per connection per UTC day); cases 6 to 8 and one follow-up ran on 2026-11-27.
 
-| # | Path | Kind | Expected | Verdict | Right? | Miner | Time | Receipt (epoch 58) |
+| # | Path | Kind | Expected | Verdict | Right? | Miner | Time | Receipt |
 |---|---|---|---|---|---|---|---|---|
 | 1 | Hermes `tool_call` | correct `is_leap` function | SUBMIT | FIX | **No** | 9002 | 9.6 s | `0xfd7a163eb82e97381ad72696a00f8e90b733d599485349d90fa1db4927508e75` |
 | 2 | OpenClaw client | wrong SQL (no `SUM`/`GROUP BY`) | FIX | FIX | Yes | 302 | 6.5 s | `0x51f15e47e78387c36b9ff0e28ff06f0b5a3f11c0625c0c636e86e6c01ee2d999` |
 | 3 | Hermes `tool_call` | incomplete (2 of 3 conversions) | FIX | FIX | Yes | 9002 | 11.4 s | `0x50bbd8ce63644fa5e8487dce73a4ef5bc5c31bcd416d81f4889014734acb4ba2` |
 | 4 | OpenClaw client | claims done, no translation | FIX | FIX | Yes | 20260828 | 11.7 s | `0xda04765d1f2f110771217f435e69e0f37a7f32a6cf5fb1f0154192e59b0a0b01` |
 | 5 | Hermes `tool_call` | regex without `^`/`$` anchors | FIX | FIX | Yes | 302 | 9.9 s | `0x6ff03168c7194607a6c181d05140c4f76e28e2671b8d14c0d2d99966ce1ac2e3` |
-| 6 | OpenClaw | correct 3-bullet summary, `mustInclude: ["502"]` | SUBMIT | not run | | | | |
-| 7 | Hermes | wrong fact (`O(n log n)` for binary search) | FIX | not run | | | | |
-| 8 | OpenClaw | commit message missing required `#42` | FIX | not run | | | | |
+| 6 | OpenClaw client | correct 3-bullet summary, `mustInclude: ["502"]` | SUBMIT | SUBMIT | Yes | 71074 | 11.9 s | `0x94bde47bb96673c689eeb5f32f505c1b004a9669a1dd29ffe773649d2caf091d` (epoch 63) |
+| 7 | Hermes + Gemini, model turn | wrong fact (`O(n log n)` for binary search) | FIX | FIX | Yes | 71074 | 10.3 s | `0x5a7b519a663e23b2899cc4b77784fa1e1260b835d03b6c7baa5ad972da85fbb4` (epoch 63) |
+| 8 | OpenClaw client | commit message missing required `#42` | FIX | FIX | Yes | 71074 | 7.0 s | `0x19669fe3f79c327c0090ec7f927a480e2860c1215c91fb093bb14923fa3336a1` (epoch 63) |
+
+Cases 1-5 are in epoch 58. Follow-ups (the agent fixes the result after a FIX and checks again):
+
+| # | Path | After | Verdict | Right? | Miner | Time | Receipt (epoch 63) |
+|---|---|---|---|---|---|---|---|
+| 7b | Hermes + Gemini, same model turn | the model itself corrected case 7 to `O(log n)` and called the tool again | SUBMIT (score 0.9) | Yes | 71074 | 5.0 s | `0x1eaaf8815c48d79d37b5e8ea315f785728401f4aeaa60b9aad4a3941cc2e99a2` |
+| 9 | OpenClaw client | case 2 SQL with `SUM` and `GROUP BY` | SUBMIT | Yes | 71074 | 8.9 s | `0x17c4cc692f9e5c2c3a1e393c92741250d28df995c81121b818962049f98b2c9d` |
+
+Case 10 (the planned Hermes fix-and-recheck) was not run separately: case 7b is the same step, made by the model.
+Case 11 (resend of the case 1 miss) was not run: the day's 5 checks were used. Both wait for another day.
 
 **What it shows**
 
-- **4 of 4 defective results were stopped.** Each would otherwise have reached the user as "done". The reasons
+- **Totals over 10 judged calls (8 cases + 2 follow-ups): 9 right, 1 wrong.** 6 of 6 defective results were stopped; 3 of 4 correct results got SUBMIT; 1 correct result (case 1) was sent to FIX.
+- **The first 4 defective results were stopped.** Each would otherwise have reached the user as "done". The reasons
   are specific enough to act on: "does not aggregate orders per customer", "omitting the required conversion
   for 37 C", "only states that the translation was done", "lacks start- and end-of-string anchors".
-- **1 of 1 correct result was wrongly rejected (case 1).** Miner 9002 answered "The result does not provide
+- **1 correct result was wrongly rejected (case 1).** Miner 9002 answered "The result does not provide
   the requested Python function or any code, only a statement that no work was delivered", although the
   result was the function. We saw the same reason from the same Miner on 2026-11-25 on a correct multi-line CSV
   result (gig-guard `eval/deliver/second-judge-2.jsonl`). The same Miner read the multi-line result of case 3
   correctly, so line breaks alone don't explain it. A false FIX costs the agent one retry and, under the skill,
   ends with the user seeing the result and the reason. It never lets a bad result through.
-- **No defective result got SUBMIT.** On 5 cases that is a small sample. Our larger runs found the judge too
+- **Case 8's FIX came from the free `mustInclude` check (`#42` missing).** The judge alone said `partially_satisfies`, which the server also treats as not a pass.
+- **No defective result got SUBMIT.** On 10 calls that is a small sample. Our larger runs found the judge too
   lenient on outside data (about 4 of 10 weaker outputs passed on LLMBar; see the top-level README).
 - Every judged call returned a receipt hash, and all 5 are now **settled**: on 2026-11-26 ~18:5x UTC each one was found in epoch 58's block on the
   node (`GET https://devnode.telegraphprotocol.com/v1/blocks/58/deliveries/<hash>`: intent TASK_EXECUTION_QUALITY_GENERAL, 10,000 uUSDC,
@@ -41,7 +53,7 @@ result, and what a careful reviewer would say (`expected`). The judge never sees
 - On 2026-11-26 ~18:5x UTC a further try at cases 6 and 8 came back HOLD before any payment: "this connection has used its 5 checks for
   today (UTC)". That is the hosted server's daily cap failing closed (no judgement, no charge, and the agent is told not to say done);
   cases 6-8 run after 00:00 UTC on 27 Nov.
-- Spend: 5 judgements × $0.01 test USDC = $0.05 (testnet).
+- Spend: 10 judgements × $0.01 test USDC = $0.10 (testnet).
 
 ## A real model turn (Hermes + Gemini)
 
@@ -51,8 +63,10 @@ and a real model (`gemini-3.5-flash-lite`, OpenAI-compatible endpoint), given th
 `O(n log n)`. The model found the tool and called `mcp__donecheck__done_check` itself, with the task and the draft
 verbatim. The day's cap was used up, so the server answered HOLD before any judgement, and the model did what the
 skill asks: it did not say done, it showed the result and the reason, and asked the user. Transcript (role, content,
-tool calls; provider signatures removed): `demo/runs/hermes-model-turn-1126-cap-hold.json`. After 00:00 UTC case 7
-runs as this same model turn, so the judged verdict comes from a model-made call.
+tool calls; provider signatures removed): `demo/runs/hermes-model-turn-1126-cap-hold.json`. On 2026-11-27 ~00:07 UTC case 7 ran
+as this same model turn with the cap reset: the model called the tool, got FIX with the reason, corrected the answer to
+`O(log n)` on its own, called the tool again, got SUBMIT, and only then answered (rows 7 and 7b above). Transcript:
+`demo/runs/hermes-model-turn-1127-case7.json`.
 
 Raw tool results: [demo/runs/](demo/runs/).
 
@@ -88,17 +102,17 @@ Neither framework was installed on the host. Both ran inside a sandbox built fro
   removed, which shows the rule is what blocks it), a host service on `127.0.0.1:9222` was unreachable, and
   `nft flush ruleset` from inside was denied.
 
-## Pending runs
+## How to rerun
 
-The hosted server allows 5 checks per connection per UTC day. After 00:00 UTC:
+The hosted server allows 5 checks per connection per UTC day.
 
 ```bash
 # OpenClaw path (npm i @modelcontextprotocol/client@2.4.0 first)
 node integrations/test/openclaw-sdk-check.mjs --tasks integrations/demo/tasks.json --call 6,8
 node integrations/test/openclaw-sdk-check.mjs --tasks integrations/demo/tasks-followup.json --call 9
-# Hermes path (inside a Hermes checkout with the server configured)
-# case 7: a real model turn (hermes chat -s done-check, model calls the tool itself; see above)
-.venv/bin/python <kit>/integrations/test/hermes-dispatch-check.py --tasks <kit>/integrations/demo/tasks-followup.json --call 10
+# Hermes tool path (inside a Hermes checkout with the server configured)
+.venv/bin/python <kit>/integrations/test/hermes-dispatch-check.py --tasks <kit>/integrations/demo/tasks.json --call 1,3,5
+# Hermes model turn: hermes chat --oneshot -s done-check -q "<task, draft, check it before saying done>"
 ```
 
-Case 11 (resend of the case 1 miss) is the sixth and needs another day or another connection.
+Still open: case 11 (resend of the case 1 miss).

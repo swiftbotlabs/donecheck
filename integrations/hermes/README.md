@@ -98,8 +98,9 @@ built from source at commit `e0dcc39f` (2026-11-25; `hermes --version`: 2026.9.2
   `skill_view` load it.
 
 Not run: `hermes mcp add` to completion (it reads its answers from a terminal, and the sandbox has none);
-`hermes skills install <url>` (it fetches from GitHub, which this test did not use); a full chat turn with a
-real model (no model key was used).
+`hermes skills install <url>` (it fetches from GitHub, which this test did not use). One full chat turn with a real
+model did run (`gemini-3.5-flash-lite`, case 7 in `../RESULTS-openclaw-hermes.md`): the model called the tool, fixed
+the answer on FIX and got SUBMIT on the recheck.
 
 Docs and source read: `website/docs/user-guide/features/mcp.md`, `website/docs/reference/mcp-config-reference.md`,
 `website/docs/user-guide/features/skills.md`, `website/docs/user-guide/features/tool-search.md`,

@@ -30,7 +30,7 @@ Cases 1-5 are in epoch 58. Follow-ups (the agent fixes the result after a FIX an
 | 9 | OpenClaw client | case 2 SQL with `SUM` and `GROUP BY` | SUBMIT | Yes | 71074 | 8.9 s | `0x17c4cc692f9e5c2c3a1e393c92741250d28df995c81121b818962049f98b2c9d` |
 
 Case 10 (the planned Hermes fix-and-recheck) was not run separately: case 7b is the same step, made by the model.
-Case 11 (resend of the case 1 miss) was not run: the day's 5 checks were used. Both wait for another day.
+Case 11 (resend of the case 1 miss) was not run: the day's 5 checks were used. It waits for another day.
 
 **What it shows**
 
@@ -82,11 +82,11 @@ Raw tool results: [demo/runs/](demo/runs/).
 | Skill loads | `done-check ✓ Ready`, visible to model | `hermes skills list`: enabled; `skill_view` loads it |
 | Skill passes the framework's checks | not checked | `skills_guard`: safe, 0 findings; `skill_linter`: 0 findings |
 | Control | no `transport` → SSE → probe fails with 405 | descriptive `tool_search` query misses the tool; exact name finds it |
-| Full agent turn with a real model | not run (no model key) | not run (no model key) |
+| Full agent turn with a real model | not run | `gemini-3.5-flash-lite`: the model called the tool, fixed on FIX, rechecked, SUBMIT (case 7, 7b) |
 
-**Not run:** a chat turn in either framework with a real language model, so no test shows a model choosing to
-call the tool because of the skill. The skill text, the tool name the model sees and the dispatch path were each
-tested; the model's decision was not. `hermes mcp add` (interactive) and `hermes skills install <url>` /
+**Not run:** a chat turn in OpenClaw with a real language model. In Hermes one real model turn ran (case 7): with
+the skill loaded, the model chose to call the tool, acted on the FIX and rechecked. One turn on one model is a
+single example, not a rate. `hermes mcp add` (interactive) and `hermes skills install <url>` /
 the OpenClaw `curl` skill download (both fetch from GitHub) were not run.
 
 ### How the frameworks were run

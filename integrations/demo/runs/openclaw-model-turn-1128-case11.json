@@ -1,0 +1,43 @@
+{
+  "ok": true,
+  "status": "ok",
+  "final": "**Verdict:** SUBMIT\n\n**Reason:** \nThe function correctly implements the Gregorian leap-year rule: divisible by 4, except centuries must also be divisible by 400.\n\n**Receipt:**\n```json\n{\n  \"receipt_hash\": \"0x6d4c7c3fae99cba43ef97812b0c00e47393296294cd9f46fb551bc60c32080dc\",\n  \"epoch_id\": 68,\n  \"intent\": \"TASK_EXECUTION_QUALITY_GENERAL\",\n  \"amount_uusdc\": 10000,\n  \"miner_id\": \"71074\"\n}\n```",
+  "payloads": [
+    {
+      "text": "**Verdict:** SUBMIT\n\n**Reason:** \nThe function correctly implements the Gregorian leap-year rule: divisible by 4, except centuries must also be divisible by 400.\n\n**Receipt:**\n```json\n{\n  \"receipt_hash\": \"0x6d4c7c3fae99cba43ef97812b0c00e47393296294cd9f46fb551bc60c32080dc\",\n  \"epoch_id\": 68,\n  \"intent\": \"TASK_EXECUTION_QUALITY_GENERAL\",\n  \"amount_uusdc\": 10000,\n  \"miner_id\": \"71074\"\n}\n```",
+      "mediaUrl": null
+    }
+  ],
+  "usage": {
+    "usageReport": {
+      "state": "available"
+    },
+    "input": 31530,
+    "output": 1616,
+    "cacheRead": 34362,
+    "cacheWrite": 0,
+    "total": 67508,
+    "cost": {
+      "total": 0
+    }
+  },
+  "codeModeEngaged": true,
+  "assistantTurns": 7,
+  "bridgeCalls": {
+    "search": 2,
+    "describe": 0,
+    "call": 1
+  },
+  "toolSummary": {
+    "calls": 7,
+    "tools": [
+      "exec",
+      "donecheck__done_check",
+      "wait"
+    ],
+    "failures": 2
+  },
+  "model": "gemini-3.5-flash-lite",
+  "provider": "google",
+  "sessionId": "ce6bcbc4-06f7-4a35-a834-7b060ac8c148"
+}

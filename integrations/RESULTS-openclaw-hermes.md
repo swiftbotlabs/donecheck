@@ -1,6 +1,6 @@
 # donecheck in OpenClaw and Hermes Agent: results
 
-Runs: 2026-11-26 and 2026-11-27 (UTC); last updated 2026-11-27. Everything ran against the live hosted server `https://donecheck.swiftbotlab.workers.dev/mcp`.
+Runs: 2026-11-26, 27 and 28 (UTC); last updated 2026-11-28. Everything ran against the live hosted server `https://donecheck.swiftbotlab.workers.dev/mcp`.
 **Testnet:** each judgement is a $0.01 test-USDC payment to a Telegraph Miner from an Ethereum Sepolia escrow,
 paid by the hosted service.
 
@@ -30,13 +30,14 @@ Cases 1-5 are in epoch 58. Follow-ups (the agent fixes the result after a FIX an
 |---|---|---|---|---|---|---|---|
 | 7b | Hermes + Gemini, same model turn | the model itself corrected case 7 to `O(log n)` and called the tool again | SUBMIT (score 0.9) | Yes | 71074 / 4877 | 5.0 s | `0x1eaaf8815c48d79d37b5e8ea315f785728401f4aeaa60b9aad4a3941cc2e99a2` |
 | 9 | OpenClaw client | case 2 SQL with `SUM` and `GROUP BY` | SUBMIT | Yes | 71074 / 4877 | 8.9 s | `0x17c4cc692f9e5c2c3a1e393c92741250d28df995c81121b818962049f98b2c9d` |
+| 11 | OpenClaw + Gemini, model turn (28 Nov) | case 1 resent: the same correct `is_leap` function that was wrongly sent back | SUBMIT | Yes | 71074 / settles in epoch 68 | n/a | `0x6d4c7c3fae99cba43ef97812b0c00e47393296294cd9f46fb551bc60c32080dc` (epoch 68) |
 
 Case 10 (the planned Hermes fix-and-recheck) was not run separately: case 7b is the same step, made by the model.
-Case 11 (resend of the case 1 miss) was not run: the day's 5 checks were used. It waits for another day.
+Case 11 (the case 1 function, resent) ran on 28 Nov as an OpenClaw model turn (below): SUBMIT. The miss in case 1 did not repeat with Miner 71074; it is still a miss in the table.
 
 **What it shows**
 
-- **Totals over 10 judged calls (8 cases + 2 follow-ups): 9 right, 1 wrong.** 6 of 6 defective results were stopped; 3 of 4 correct results got SUBMIT; 1 correct result (case 1) was sent to FIX.
+- **Totals over 11 judged calls (8 cases + 3 follow-ups): 10 right, 1 wrong.** 6 of 6 defective results were stopped; 4 of 5 correct results got SUBMIT; 1 correct result (case 1) was sent to FIX, and the same function resent later (case 11) got SUBMIT.
 - **The first 4 defective results were stopped.** Each would otherwise have reached the user as "done". The reasons
   are specific enough to act on: "does not aggregate orders per customer", "omitting the required conversion
   for 37 C", "only states that the translation was done", "lacks start- and end-of-string anchors".
@@ -84,12 +85,9 @@ Raw tool results: [demo/runs/](demo/runs/).
 | Skill loads | `done-check ✓ Ready`, visible to model | `hermes skills list`: enabled; `skill_view` loads it |
 | Skill passes the framework's checks | not checked | `skills_guard`: safe, 0 findings; `skill_linter`: 0 findings |
 | Control | no `transport` → SSE → probe fails with 405 | descriptive `tool_search` query misses the tool; exact name finds it |
-| Full agent turn with a real model | not run | `gemini-3.5-flash-lite`: the model called the tool, fixed on FIX, rechecked, SUBMIT (case 7, 7b) |
+| Full agent turn with a real model | `gemini-3.5-flash-lite` via `openclaw agent exec`: the model called `donecheck__done_check` itself on case 11 and reported SUBMIT with the receipt | `gemini-3.5-flash-lite`: the model called the tool, fixed on FIX, rechecked, SUBMIT (case 7, 7b) |
 
-**Not run:** a chat turn in OpenClaw with a real language model. In Hermes one real model turn ran (case 7): with
-the skill loaded, the model chose to call the tool, acted on the FIX and rechecked. One turn on one model is a
-single example, not a rate. `hermes mcp add` (interactive) and `hermes skills install <url>` /
-the OpenClaw `curl` skill download (both fetch from GitHub) were not run.
+**Model turns:** one in each framework, each on one model (`gemini-3.5-flash-lite`). Hermes (case 7): the model called the tool, acted on the FIX and rechecked. OpenClaw (case 11, `openclaw agent exec` with the done-check skill, 28 Nov 00:02 UTC): the model called `donecheck__done_check` through OpenClaw's code-mode bridge and reported SUBMIT and the receipt verbatim; OpenClaw's summary (`demo/runs/openclaw-model-turn-1128-case11.json`) lists 7 tool calls, 2 of them failed `exec` calls in the sandbox (no shell there), and 1 paid check. The check is also row 2 of the hosted ledger (https://donecheck.swiftbotlab.workers.dev/ledger). One turn per framework is an example, not a rate.
 
 ### How the frameworks were run
 
@@ -117,4 +115,4 @@ node integrations/test/openclaw-sdk-check.mjs --tasks integrations/demo/tasks-fo
 # Hermes model turn: hermes chat --oneshot -s done-check -q "<task, draft, check it before saying done>"
 ```
 
-Still open: case 11 (resend of the case 1 miss).
+

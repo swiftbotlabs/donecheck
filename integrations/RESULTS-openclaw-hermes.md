@@ -52,7 +52,7 @@ Case 11 (the case 1 function, resent) ran on 28 Nov as an OpenClaw model turn (b
   lenient on outside data (about 4 of 10 weaker outputs passed on LLMBar; see the top-level README).
 - Every judged call returned a receipt hash. The 5 from 26 Nov are **settled**: on 2026-11-26 ~18:5x UTC each one was found in epoch 58's block on the
   node (`GET https://devnode.telegraphprotocol.com/v1/blocks/58/deliveries/<hash>`: intent TASK_EXECUTION_QUALITY_GENERAL, 10,000 uUSDC,
-  a 9-hash proof each; settled Miner ids 6121, 6119, 6121, 5311, 6119 for cases 1-5). The 5 from 27 Nov are **settled** too: on 2026-11-27 ~08:5x UTC each one was found in epoch 63's block (same endpoint with `/blocks/63/`; intent TASK_EXECUTION_QUALITY_GENERAL, a 9-hash proof each, settled Miner id 4877 for all 5). All 10 receipts are settled.
+  a 9-hash proof each; settled Miner ids 6121, 6119, 6121, 5311, 6119 for cases 1-5). The 5 from 27 Nov are **settled** too: on 2026-11-27 ~08:5x UTC each one was found in epoch 63's block (same endpoint with `/blocks/63/`; intent TASK_EXECUTION_QUALITY_GENERAL, a 9-hash proof each, settled Miner id 4877 for all 5). All 10 receipts of 26-27 Nov are settled. The 28 Nov receipt (case 11) is in epoch 68, which had not been recorded on the node when this was written.
 - On 2026-11-26 ~18:5x UTC a further try at cases 6 and 8 came back HOLD before any payment: "this connection has used its 5 checks for
   today (UTC)". That is the hosted server's daily cap failing closed (no judgement, no charge, and the agent is told not to say done);
   cases 6-8 run after 00:00 UTC on 27 Nov.

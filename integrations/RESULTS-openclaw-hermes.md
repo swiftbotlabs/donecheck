@@ -30,7 +30,7 @@ Cases 1-5 are in epoch 58. Follow-ups (the agent fixes the result after a FIX an
 |---|---|---|---|---|---|---|---|
 | 7b | Hermes + Gemini, same model turn | the model itself corrected case 7 to `O(log n)` and called the tool again | SUBMIT (score 0.9) | Yes | 71074 / 4877 | 5.0 s | `0x1eaaf8815c48d79d37b5e8ea315f785728401f4aeaa60b9aad4a3941cc2e99a2` |
 | 9 | OpenClaw client | case 2 SQL with `SUM` and `GROUP BY` | SUBMIT | Yes | 71074 / 4877 | 8.9 s | `0x17c4cc692f9e5c2c3a1e393c92741250d28df995c81121b818962049f98b2c9d` |
-| 11 | OpenClaw + Gemini, model turn (28 Nov) | case 1 resent: the same correct `is_leap` function that was wrongly sent back | SUBMIT | Yes | 71074 / settles in epoch 68 | n/a | `0x6d4c7c3fae99cba43ef97812b0c00e47393296294cd9f46fb551bc60c32080dc` (epoch 68) |
+| 11 | OpenClaw + Gemini, model turn (28 Nov) | case 1 resent: the same correct `is_leap` function that was wrongly sent back | SUBMIT | Yes | 71074 / settled in epoch 68 (4877) | n/a | `0x6d4c7c3fae99cba43ef97812b0c00e47393296294cd9f46fb551bc60c32080dc` (epoch 68) |
 
 Case 10 (the planned Hermes fix-and-recheck) was not run separately: case 7b is the same step, made by the model.
 Case 11 (the case 1 function, resent) ran on 28 Nov as an OpenClaw model turn (below): SUBMIT. The miss in case 1 did not repeat with Miner 71074; it is still a miss in the table.
@@ -52,7 +52,7 @@ Case 11 (the case 1 function, resent) ran on 28 Nov as an OpenClaw model turn (b
   lenient on outside data (about 4 of 10 weaker outputs passed on LLMBar; see the top-level README).
 - Every judged call returned a receipt hash. The 5 from 26 Nov are **settled**: on 2026-11-26 ~18:5x UTC each one was found in epoch 58's block on the
   node (`GET https://devnode.telegraphprotocol.com/v1/blocks/58/deliveries/<hash>`: intent TASK_EXECUTION_QUALITY_GENERAL, 10,000 uUSDC,
-  a 9-hash proof each; settled Miner ids 6121, 6119, 6121, 5311, 6119 for cases 1-5). The 5 from 27 Nov are **settled** too: on 2026-11-27 ~08:5x UTC each one was found in epoch 63's block (same endpoint with `/blocks/63/`; intent TASK_EXECUTION_QUALITY_GENERAL, a 9-hash proof each, settled Miner id 4877 for all 5). All 10 receipts of 26-27 Nov are settled. The 28 Nov receipt (case 11) is in epoch 68, which had not been recorded on the node when this was written.
+  a 9-hash proof each; settled Miner ids 6121, 6119, 6121, 5311, 6119 for cases 1-5). The 5 from 27 Nov are **settled** too: on 2026-11-27 ~08:5x UTC each one was found in epoch 63's block (same endpoint with `/blocks/63/`; intent TASK_EXECUTION_QUALITY_GENERAL, a 9-hash proof each, settled Miner id 4877 for all 5). All 10 receipts of 26-27 Nov are settled. The 28 Nov receipt (case 11) is **settled** too: on 2026-11-28 07:04 UTC it was found in epoch 68's block (`/blocks/68/`, intent TASK_EXECUTION_QUALITY_GENERAL, an 8-hash proof, settled Miner id 4877). All 11 receipts are settled.
 - On 2026-11-26 ~18:5x UTC a further try at cases 6 and 8 came back HOLD before any payment: "this connection has used its 5 checks for
   today (UTC)". That is the hosted server's daily cap failing closed (no judgement, no charge, and the agent is told not to say done);
   cases 6-8 run after 00:00 UTC on 27 Nov.
